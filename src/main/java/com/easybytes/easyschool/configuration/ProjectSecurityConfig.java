@@ -18,16 +18,21 @@ public class ProjectSecurityConfig {
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		
 		//permit all requests inside web application
-		http.csrf().ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers("/public/**").and()
+		http.csrf().ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers("/public/**")
+		.ignoringRequestMatchers("/api/**").ignoringRequestMatchers("/data-api/**")
+		.ignoringRequestMatchers("/eazyschool/actuator/**").and()
 		.authorizeHttpRequests()
 		.requestMatchers("/dashboard").authenticated()
-		.requestMatchers("/displayMessages").hasRole("ADMIN")
+		.requestMatchers("/displayMessages/**").hasRole("ADMIN")
 		.requestMatchers("/closeMsg/**").hasRole("ADMIN")
 		.requestMatchers("/admin/**").hasRole("ADMIN")
+		.requestMatchers("/eazyschool/actuator/**").hasRole("ADMIN")
+		.requestMatchers("/api/**").authenticated()
 		.requestMatchers("/","/home").permitAll()
 		.requestMatchers("/displayProfile").authenticated()
 		.requestMatchers("/student/**").hasRole("STUDENT")
 		.requestMatchers("/updateProfile").authenticated()
+		.requestMatchers("/data-api/**").authenticated()
 		.requestMatchers("/holidays/**").permitAll()
 		.requestMatchers("/contact").permitAll()
 		.requestMatchers("/saveMsg").permitAll()

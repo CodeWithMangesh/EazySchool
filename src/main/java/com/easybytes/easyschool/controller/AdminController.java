@@ -4,21 +4,27 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.easybytes.easyschool.EasyschoolApplication;
 import com.easybytes.easyschool.model.Courses;
 import com.easybytes.easyschool.model.EazyClass;
 import com.easybytes.easyschool.model.Person;
+import com.easybytes.easyschool.model.Roles;
 import com.easybytes.easyschool.repository.CoursesRepository;
 import com.easybytes.easyschool.repository.EazyClassRepository;
 import com.easybytes.easyschool.repository.PersonRepository;
+import com.easybytes.easyschoolconstants.EazySchoolConstants;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +118,8 @@ public class AdminController {
 	
 	@GetMapping("/displayCourses")
 	public ModelAndView displayCourses(Model model) {
-		List<Courses> courses = coursesRepository.findAll();
+		//List<Courses> courses = coursesRepository.findByOrderByName();
+		List<Courses> courses = coursesRepository.findAll(Sort.by("name").ascending());
 		ModelAndView modelAndView = new ModelAndView("courses_secure.html");
 		modelAndView.addObject("courses", courses);
 		modelAndView.addObject("course", new Courses());
@@ -174,6 +181,58 @@ public class AdminController {
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/viewStudents?id="+courses.getCourseId());
 		return modelAndView;
 	}
+	
+	//below block is added by mangesh
+	
+	@GetMapping("/allStudents")
+	public ModelAndView allStudents(Model model, @RequestParam(required = false) String name) {
+		System.out.println("calling all students");
+		Roles roles = new Roles();
+		roles.setRoleId(2);
+		String errorMessage = null;
+		if (StringUtils.hasText(name)) {
+			List<Person> students = personRepository.findByNameAndRoles(name, roles);
+			ModelAndView modelAndView = new ModelAndView("all_students.html");
+			modelAndView.addObject("students", students);
+			if(students == null || students.isEmpty()) {
+			errorMessage = "No student found!";
+			}
+			modelAndView.addObject("errorMessage", errorMessage);
+			return modelAndView;
+		}
+		List<Person> students = personRepository.findAllByRoles(roles);
+		System.out.println(students);
+		for(Person per : students) {
+			if(per.getEazyClass() != null)
+			System.out.println(per.getEazyClass().getName());
+		}
+		ModelAndView modelAndView = new ModelAndView("all_students.html");
+		modelAndView.addObject("students", students);
+		return modelAndView;
+	}
+	@GetMapping("/viewStudent/{id}/courses")
+	public String viewStudent(@PathVariable int id, Model model) {
+		System.out.println("calling student");
+		System.out.println(id);
+		Optional<Person> person = personRepository.findById(id);
+		System.out.println(person.get());
+		if(person.isPresent()) {
+			System.out.println(person.get().getName());
+			model.addAttribute("student1", person.get());
+            model.addAttribute("courses", person.get().getCourses());
+		}
+		return "all_students";
+	}
+	
+	/*
+	 * @GetMapping("/searchStudents") public ModelAndView searchStudents(Model
+	 * model, @ModelAttribute("person") Person person) { ModelAndView modelAndView =
+	 * new ModelAndView(); List<Person> persons =
+	 * personRepository.findByName(person.getName());
+	 * modelAndView.addObject("students", persons);
+	 * modelAndView.setViewName("redirect:/admin/allStudents?name="+person.getName()
+	 * ); return modelAndView; }
+	 */
 	 
 
 }
