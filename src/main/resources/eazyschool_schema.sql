@@ -77,10 +77,21 @@ CREATE TABLE IF NOT EXISTS `class` (
    PRIMARY KEY (`class_id`)
 );
 
+use eazyschool;
+ALTER TABLE `class`
+ADD COLUMN `teacher_id` int NULL AFTER `name`,
+ADD CONSTRAINT `FK_CLASS_TEACHER_ID` FOREIGN KEY (`teacher_id`)
+REFERENCES `teacher`(`teacher_id`);
+
 ALTER TABLE `person`
 ADD COLUMN `class_id` int NULL AFTER `address_id`,
 ADD CONSTRAINT `FK_CLASS_CLASS_ID` FOREIGN KEY (`class_id`)
 REFERENCES `class`(`class_id`);
+
+ALTER TABLE `person`
+ADD COLUMN `teacher_id` INT NULL AFTER `address_id`,
+ADD CONSTRAINT `FK_TEACHER_TEACHER_ID` FOREIGN KEY (`teacher_id`)
+REFERENCES `teacher`(`teacher_id`);
 
 CREATE TABLE IF NOT EXISTS `courses` (
   `course_id` int NOT NULL AUTO_INCREMENT,
@@ -99,4 +110,65 @@ CREATE TABLE IF NOT EXISTS `person_courses` (
   FOREIGN KEY (person_id) REFERENCES person(person_id),
   FOREIGN KEY (course_id) REFERENCES courses(course_id),
    PRIMARY KEY (`person_id`,`course_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `teacher_classes` (
+  `teacher_id` int NOT NULL,
+  `class_id` int NOT NULL,
+  FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id),
+  FOREIGN KEY (class_id) REFERENCES class(class_id),
+   PRIMARY KEY (`teacher_id`,`class_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `question` (
+  `question_id` int NOT NULL AUTO_INCREMENT,
+  `que` varchar(100) NOT NULL,
+  `ans` varchar(10) DEFAULT NULL,
+  `person_id` int NOT NULL,
+  `teacher_id` int NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `created_by` varchar(50) NOT NULL,
+  `updated_at` TIMESTAMP DEFAULT NULL,
+  `updated_by` varchar(50) DEFAULT NULL,
+   PRIMARY KEY (`question_id`),
+   FOREIGN KEY (person_id) REFERENCES person(person_id),
+   FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
+);
+
+CREATE TABLE IF NOT EXISTS `subjects` (
+  `subject_id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `teacher_id` INT DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `created_by` VARCHAR(50) NOT NULL,
+  `updated_at` TIMESTAMP DEFAULT NULL,
+  `updated_by` VARCHAR(50) DEFAULT NULL,
+   PRIMARY KEY (`subject_id`),
+   FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
+);
+
+CREATE TABLE IF NOT EXISTS `subjects_classes` (
+  `subject_id` INT NOT NULL,
+  `class_id` INT NOT NULL,
+  FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
+  FOREIGN KEY (class_id) REFERENCES class(class_id),
+  PRIMARY KEY (`subject_id`,`class_id`)
+);
+
+CREATE TABLE IF NOT EXISTS `leave_requests` (
+  `leave_id` INT NOT NULL AUTO_INCREMENT,
+  `student_id` INT DEFAULT NULL,
+  `teacher_id` INT DEFAULT NULL,
+  `reason` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(50) NOT NULL,
+  `start_date` TIMESTAMP NOT NULL,
+  `end_date` TIMESTAMP NOT NULL,
+  `request_date` TIMESTAMP NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `created_by` VARCHAR(50) NOT NULL,
+  `updated_at` TIMESTAMP DEFAULT NULL,
+  `updated_by` VARCHAR(50) DEFAULT NULL,
+   PRIMARY KEY (`leave_id`),
+   FOREIGN KEY (student_id) REFERENCES person(person_id),
+   FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
 );

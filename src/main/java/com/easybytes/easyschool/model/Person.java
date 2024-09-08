@@ -19,13 +19,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -96,4 +96,11 @@ public class Person extends BaseEntity{
     			joinColumns = {@JoinColumn(name = "person_id", referencedColumnName = "personId")},
     			inverseJoinColumns = {@JoinColumn(name= "course_id", referencedColumnName = "courseId")})
     private Set<Courses> courses = new HashSet<Courses>();
+    
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, targetEntity = Teacher.class)
+    @JoinColumn(name = "teacher_id", referencedColumnName = "teacherId", nullable = true)
+    private Teacher teacher;
+    
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Marks> marks = new HashSet<>();
 }

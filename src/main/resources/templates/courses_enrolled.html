@@ -58,6 +58,55 @@
             </tr>
             </tbody>
         </table>
+        
+        
+        <div class="row mb-4" th:if="${#lists.size(allCourses) > 0}">
+            <div class="overview-wrap">
+                <h3 class="heading-21921" th:text="'Wants to Enroll in the below Courses?'"></h3>
+            </div>
+        </div>
+        <table class="table table-striped table-hover" th:if="${#lists.size(allCourses) > 0}">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Course ID</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Fees</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="course: ${allCourses}">
+                <td th:text="${course.courseId}"></td>
+                <td th:text="${course.name}"></td>
+                <td th:text="${course.fees}"></td>
+				<td><a th:href="@{/student/enrollCourses/{id}(id=${course.courseId})}"
+							class="btn btn-success">Enroll</a></td>
+					</tr>
+            </tbody>
+        </table>
+        
+        <div class="row mb-4" th:if="${#lists.size(requests) > 0}">
+            <div class="overview-wrap">
+                <h3 class="heading-21921" th:text="'Requested Courses'"></h3>
+            </div>
+        </div>
+        <table class="table table-striped table-hover" th:if="${#lists.size(requests) > 0}">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Course ID</th>
+                <th scope="col">Course Name</th>
+                <th scope="col">Fees</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="course: ${requests}">
+                <td th:text="${course.courseId}"></td>
+                <td th:text="${course.name}"></td>
+                <td th:text="${course.fees}"></td>
+					</tr>
+            </tbody>
+        </table>
+        
     </div>
     <div class="col-md-2 login-center text-start">
         <a th:href="@{/dashboard}">

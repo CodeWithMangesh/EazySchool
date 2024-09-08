@@ -25,10 +25,10 @@
 	<section class="inner-banner py-5">
 		<div class="w3l-breadcrumb py-lg-5">
 			<div class="container pt-4 pb-sm-4">
-				<h4 class="inner-text-title pt-5">Students Details</h4>
+				<h4 class="inner-text-title pt-5">Teachers Details</h4>
 				<ul class="breadcrumbs-custom-path">
 					<li><a th:href="@{/home}">Home</a></li>
-					<li class="active"><i class="fas fa-angle-right"></i>Students</li>
+					<li class="active"><i class="fas fa-angle-right"></i>Teacher</li>
 				</ul>
 			</div>
 		</div>
@@ -101,60 +101,93 @@
 						<th scope="col">Id</th>
 						<th scope="col">Name</th>
 						<th scope="col">Email</th>
-						<th scope="col">Mobile Num</th>
-						<th scope="col">Class</th>
-						<!-- <th scope="col"></th> -->
+						<!-- <th scope="col">Mobile Num</th> -->
+						<th scope="col">Subject</th>
+						<th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">Classes</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="person: ${students}">
-						<td th:text="${person.personId}"></td>
+					<tr th:each="person: ${teachers}">
+						<td th:text="${person.teacherId}"></td>
 						<td th:text="${person.name}"></td>
 						<td th:text="${person.email}"></td>
-						<td th:text="${person.mobileNumber}"></td>
-						<span th:if="${person.eazyClass != null}">
-							<td th:text="${person.eazyClass.name}"></td>
-						</span>
-						<span th:unless="${person.eazyClass != null}">
-							<td>null</td>
-						</span>
-						<!-- @{/admin/viewStudent/{id}/courses(id=${person.personId})} -->
-						<!-- <td><a
-							th:href="@{/admin/viewStudent/{id}/courses(id=${person.personId})}" 
-							class="btn btn-success" th:data-toggle="modal"
-							th:data-target="'#addStudent'">VIEW</a></td> -->
-						<td><a
-							th:href="@{/admin/deleteStudentFromCourse(personId=${person.personId})}"
+						<td th:text="${person.subject.name}"></td>
+						<td sec:authorize="hasRole('ROLE_ADMIN')">
+							<table class="table table-striped table-hover">
+								<tbody>
+									<tr th:each="class: ${person.classes}">
+										<td th:text="${class.name}"></td>
+										<td><a
+											th:href="@{/admin/deleteClassFromTeacher(teacherId=${person.teacherId}, classId=${class.classId})}"
+											class="btn btn-warning">DELETE</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+
+						<!-- below block is added for student -->
+						<td sec:authorize="hasRole('ROLE_STUDENT')">
+							<table class="table table-striped table-hover">
+								<tbody>
+									<!-- <tr th:each="class: ${person.classes}"> -->
+									<tr>
+										<td>
+											<div class="overview-wrap">
+												<button class="btn btn-style btn-style-1 text-left"
+													type="button" data-bs-toggle="modal"
+													data-bs-target="#addQuestion"
+													th:data-teacher-id="${person.teacherId}">ASK
+													QUESTION</button>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+						<td sec:authorize="hasRole('ROLE_ADMIN')"><a
+							th:href="@{/admin/deleteTeacher(teacherId=${person.teacherId})}"
 							class="btn btn-warning">DELETE</a></td>
+
+
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		
-		<div class="modal fade login-block" id="addStudent" tabindex="-1"
-							role="dialog" aria-labelledby="addStudentModalLabel"
-							aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content">
-									<div class="modal-header border-bottom-0">
-										  <!-- <h5 class="modal-title" id="addStudentModalLabel"
-											th:text="${student != null ? student.name + ' Courses' : 'Courses'}"></h5>  --> 
-											<h5>hii</h5>
-										<button type="button" class="close" data-bs-dismiss="modal"
-											aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									 <!-- <div class="modal-body">
-										<ul>
-											<li th:each="course : ${courses}" th:text="${course.name}"></li>
-										</ul>
-									</div>  -->
+		<div class="modal fade login-block" th:id="addQuestion" tabindex="-1"
+			role="dialog" aria-labelledby="addStudentModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header border-bottom-0">
+						<h5 class="modal-title" id="addStudentModalLabel">Ask
+							Question</h5>
+						<button type="button" class="close" data-bs-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form th:action="@{/student/askQuestion}" method="post"
+						class="signin-form" th:object="${question}">
+						<div class="modal-body">
+							<div class="input-grids">
+								<label class="control-label" for="email">Question </label> <input
+									type="text" class="form-control" name="que" id="que"
+									th:field="*{que}" required placeholder="Ask your question">
 
-								</div>
+								<input type="hidden" class="form-control" name="teacherId"
+									id="teacherId" th:field="*{teacherId}" required
+									placeholder="teacherId">
 							</div>
 						</div>
+						<div
+							class="modal-footer border-top-0 d-flex justify-content-center">
+							<button type="submit" class="btn btn-style btn-style-3">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 
 
 
@@ -195,6 +228,23 @@
 			document.documentElement.scrollTop = 0;
 		}
 	</script>
+	<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modals = document.querySelectorAll('.modal');
+
+        modals.forEach(modal => {
+            modal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const teacherId = button.getAttribute('data-teacher-id'); // Extract info from data-* attributes
+
+                // Update the modal's content with the correct teacherId
+                const inputTeacherId = modal.querySelector('#teacherId');
+                inputTeacherId.value = teacherId;
+            });
+        });
+    });
+</script>
+
 	<!-- //move top -->
 
 	<!-- common jquery plugin -->

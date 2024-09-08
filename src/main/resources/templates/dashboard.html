@@ -76,7 +76,7 @@ Author URL: http://w3layouts.com
                         <div class="overview__inner">
                             <div class="overview-box clearfix">
                                 <div class="icon">
-                                    <i class="fas fa-envelope-open-text"></i>
+                                    <i class="fas fa-comments"></i>
                                 </div>
                                 <div class="text">
                                     <h2>Messages</h2>
@@ -92,7 +92,7 @@ Author URL: http://w3layouts.com
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
                                     <div class="icon">
-                                        <i class="fas fa-envelope-open-text"></i>
+                                        <i class="fas fa-chalkboard-teacher"></i>
                                     </div>
                                     <div class="text">
                                         <h2>Classes</h2>
@@ -104,7 +104,7 @@ Author URL: http://w3layouts.com
                 </div>
                 <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a th:href="@{/admin/displayCourses}">
-                        <div class="overview-item overview-item--c2">
+                        <div class="overview-item overview-item--c4">
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
                                     <div class="icon">
@@ -137,6 +137,58 @@ Author URL: http://w3layouts.com
                     </a>
                 </div> 
                 
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/allRequests}">
+                        <div class="overview-item overview-item--c4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Requests</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/displayTeachers}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Teachers</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/admin/displaySubjects}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Subjects</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div> 
+                
+                
                 <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
                     <a th:href="@{/student/displayCourses}">
                         <div class="overview-item overview-item--c3">
@@ -153,6 +205,178 @@ Author URL: http://w3layouts.com
                         </div>
                     </a>
                 </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a th:href="@{/student/displayTeachers}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Teachers</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div> 
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a th:href="@{/student/displayQuestions}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-question-circle"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Queries</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a th:href="@{/student/displayMarks}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Marks</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a th:href="@{/student/displayLeaves}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-door-open"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Leave</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a th:href="@{/teacher/displaySubjects}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>My Subjects</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a th:href="@{/teacher/displayTeacherClasses}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>My Classes</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a th:href="@{/teacher/displayQuestions}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-question-circle"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Queries</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a th:href="@{/teacher/displayMarks}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Marks</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_TEACHER')">
+                    <a th:href="@{/teacher/displayLeaves}">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-door-open"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Leaves</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- below block is added by mangesh -->
+                <!-- <div class="col-sm-6 col-lg-3" sec:authorize="hasRole('ROLE_STUDENT')">
+                    <a th:href="@{/student/displayCourses}">
+                        <div class="overview-item overview-item--c3">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="fas fa-envelope-open-text"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>Requests</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div> -->
+                
             </div>
         </div>
     </div>
